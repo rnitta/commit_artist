@@ -1,0 +1,21 @@
+[package]
+name = "commit_artist"
+version = "0.1.0"
+authors = ["rnitta <attinyes@gmail.com>"]
+edition = "2018"
+
+[features]
+
+[dependencies]
+rust-crypto = "^0.2"
+rand ="0.7.3"
+regex = "^1.3"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+debug = false
+rpath = false
+lto = false
+debug-assertions = false
+overflow-checks = false
