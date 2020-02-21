@@ -1,11 +1,9 @@
 mod git;
-mod matcher;
 mod settings;
 
 use crate::git::commit_object::CommitObject;
 use crate::git::git_command;
-use crate::matcher::Matcher;
-use crate::settings::{MatchMode, Settings};
+use crate::settings::Settings;
 use crypto::sha1::Sha1;
 use std::sync::mpsc::channel;
 use std::thread;
@@ -13,8 +11,7 @@ use std::thread;
 fn main() {
     let path: String = git_command::current_dir_path();
     // TODO: Configurable with Command Line
-    let settings = Settings::new(path, MatchMode::Pattern("00000".to_string()), 12);
-    //    let settings = Settings::new(path, MatchMode::Repeated(7), 10);
+    let settings = Settings::new(path, "0000000".to_owned(), 6, 10);
 
     if git_command::check().is_err() {
         println!("git command not found");
@@ -68,18 +65,13 @@ fn art(settings: Settings, commit_object: &CommitObject, job_count: usize) -> St
                 co.to_sha1(&mut hasher);
                 let mut commit_hash = co.to_sha1(&mut hasher);
 
-                // FIXME: static dispatch
-                let checker: Box<dyn Fn(&str) -> bool> = match settings.mode {
-                    MatchMode::Repeated(x) => Box::new(move |s: &str| s.starts_with_repdig(x)),
-                    MatchMode::Pattern(x) => Box::new(move |s: &str| s.starts_with(&x)),
-                };
-                for _ in 0..0xfffff {
+                for _ in 0..0x1 << settings.block_size {
                     let mut committer = co.committer.clone();
                     committer.name = commit_hash.clone();
                     co.committer = committer;
                     let pre = commit_hash.clone();
                     commit_hash = co.to_sha1(&mut hasher);
-                    if checker(&commit_hash) {
+                    if commit_hash.starts_with(&settings.pattern) {
                         tx.send(Some(pre)).unwrap();
                         return;
                     }

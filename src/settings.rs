@@ -1,21 +1,18 @@
 #[derive(Clone)]
-pub enum MatchMode {
-    Repeated(usize),
-    Pattern(String),
-}
-
-#[derive(Clone)]
 pub struct Settings {
     pub path: String,
-    pub mode: MatchMode,
+    pub pattern: String,
+    pub block_size: usize,
     pub jobs: usize,
 }
 
 impl Settings {
-    pub fn new<T: Into<String>>(path: T, mode: MatchMode, jobs: usize) -> Self {
+    pub fn new<T: Into<String>>(path: T, pattern: T, block_size: usize, jobs: usize) -> Self {
+        // TODO: panic if pattern has characters other than [0-9a-f]
         Self {
             path: path.into(),
-            mode,
+            pattern: pattern.into(),
+            block_size,
             jobs,
         }
     }
