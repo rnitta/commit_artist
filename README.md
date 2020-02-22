@@ -11,9 +11,16 @@ This is a CLI tool to beautify latest commit of your git repository.
 ```shell
 $ cargo install git@github.com:rnitta/commit_artist.git
 $ cd your_working_dir
-$ commit_artist
-Yay! Now your new hash of the latest commit is <new_commit_hash>.
+$ commit_artist -p ccccccc
+Yay! Now your new hash of the latest commit is cccccc89f1b198c120e43f5d939d9b5412236573.
 ```
+
+### Command Line Options
+
+- [--path] path to working directory. default: current directory
+- [--pattern, -p] pattern to match. default: 0000000
+- [--block, -b] log\[2\](how many hashes should calculated in each thread). default: 20
+- [--jobs, -j] how many thread should spawn to bruteforce. default: your max - 1
 
 ## How it works
 ![architecture](./doc/architecture.png)
