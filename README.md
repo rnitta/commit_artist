@@ -2,8 +2,9 @@
 
 This is a CLI tool to beautify latest commit of your git repository.
 
-## Usage
+![DEMO](./doc/demo.png)
 
+## Usage
 
 ### Install Commit Artist
 
