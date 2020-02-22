@@ -72,8 +72,7 @@ pub fn filter_branch(path: &str, latest_commit_hash: &str, committer_name: &str)
                 r#"if [ "$GIT_COMMIT" = '{}' ]; then export GIT_COMMITTER_NAME='{}'; fi"#,
                 latest_commit_hash, committer_name
             ),
-            "HEAD^..HEAD"
-//            "HEAD",
+            "HEAD^..HEAD", //            "HEAD",
         ])
         .output()
         .expect("err");
