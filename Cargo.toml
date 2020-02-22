@@ -2,7 +2,18 @@
 name = "commit_artist"
 version = "0.1.0"
 authors = ["rnitta <attinyes@gmail.com>"]
+description = "git commit hash beautifier"
 edition = "2018"
+keywords = ["git", "cli"]
+repository = "https://github.com/rnitta/commit_artist"
+readme = "README.md"
+license-file = "LICENSE"
+categories = ["command-line-interface"]
+include = [
+	"src/**/*",
+	"Cargo.toml",
+	"README.md"
+]
 
 [features]
 
@@ -10,6 +21,8 @@ edition = "2018"
 rust-crypto = "^0.2"
 rand ="0.7.3"
 regex = "^1.3"
+num_cpus = "1.0"
+seahorse = "0.5.1"
 
 [profile.release]
 opt-level = 3

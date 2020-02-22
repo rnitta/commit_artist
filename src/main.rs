@@ -9,9 +9,8 @@ use std::sync::mpsc::channel;
 use std::thread;
 
 fn main() {
-    let path: String = git_command::current_dir_path();
-    // TODO: Configurable with Command Line
-    let settings = Settings::new(path, "0000000".to_owned(), 6, 10);
+    let mut settings = Settings::default();
+    settings.pattern = "0000000".to_owned();
 
     if git_command::check().is_err() {
         println!("git command not found");
@@ -46,6 +45,7 @@ fn art(settings: Settings, commit_object: &CommitObject, job_count: usize) -> St
     let mut found_hash: String = "".to_owned();
     let mut iteration_count = 0;
     let (tx, rx) = channel();
+    println!();
 
     while found_hash.is_empty() {
         for i in 0..job_count {
@@ -65,7 +65,7 @@ fn art(settings: Settings, commit_object: &CommitObject, job_count: usize) -> St
                 co.to_sha1(&mut hasher);
                 let mut commit_hash = co.to_sha1(&mut hasher);
 
-                for _ in 0..0x1 << settings.block_size {
+                for _ in 0..1u64 << settings.block_size {
                     let mut committer = co.committer.clone();
                     committer.name = commit_hash.clone();
                     co.committer = committer;
@@ -86,7 +86,10 @@ fn art(settings: Settings, commit_object: &CommitObject, job_count: usize) -> St
             }
         }
         iteration_count += 1;
-        // TODO: print progresses
+        println!(
+            "\x1b[1A{} hashes calculated...",
+            iteration_count as u128 * (1 << settings.block_size) as u128 * settings.jobs as u128
+        );
     }
     found_hash
 }
