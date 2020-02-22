@@ -66,9 +66,7 @@ fn art(settings: Settings, commit_object: &CommitObject, job_count: usize) -> St
                 let mut commit_hash = co.to_sha1(&mut hasher);
 
                 for _ in 0..1u64 << settings.block_size {
-                    let mut committer = co.committer.clone();
-                    committer.name = commit_hash.clone();
-                    co.committer = committer;
+                    co.committer.name = commit_hash.clone();
                     let pre = commit_hash.clone();
                     commit_hash = co.to_sha1(&mut hasher);
                     if commit_hash.starts_with(&settings.pattern) {
