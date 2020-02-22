@@ -5,12 +5,57 @@ use crate::git::commit_object::CommitObject;
 use crate::git::git_command;
 use crate::settings::Settings;
 use crypto::sha1::Sha1;
+use seahorse::{App, Context, Flag, FlagType};
+use std::env;
 use std::sync::mpsc::channel;
 use std::thread;
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    let app = App::new()
+        .name("Commit Artist")
+        .author(env!("CARGO_PKG_AUTHORS"))
+        .description(env!("CARGO_PKG_DESCRIPTION"))
+        .version(env!("CARGO_PKG_VERSION"))
+        .usage("commit_artist <flags>")
+        .action(art)
+        .flags(vec![
+            Flag::new(
+                "path",
+                "[optional] --path <path_to_your_repository>",
+                FlagType::String,
+            ),
+            Flag::new(
+                "pattern",
+                "[optional] --pattern <[0-9a-f]{1,40}>",
+                FlagType::String,
+            )
+            .alias("p"),
+            Flag::new("block", "[optional] --block 28", FlagType::Int).alias("b"),
+            Flag::new("jobs", "[optional] --jobs 4", FlagType::Int).alias("j"),
+        ]);
+
+    app.run(args);
+}
+
+fn art(c: &Context) {
     let mut settings = Settings::default();
-    settings.pattern = "0000000".to_owned();
+
+    if let Some(path) = c.string_flag("path") {
+        settings.path = path;
+    }
+
+    if let Some(pattern) = c.string_flag("pattern") {
+        settings.pattern = pattern;
+    }
+
+    if let Some(block) = c.int_flag("block") {
+        settings.block_size = block as usize;
+    }
+
+    if let Some(jobs) = c.int_flag("jobs") {
+        settings.jobs = jobs as usize;
+    }
 
     if git_command::check().is_err() {
         println!("git command not found");
@@ -32,7 +77,7 @@ fn main() {
 
     let latest_cat_file: String = git_command::cat_file(&settings.path, &latest_commit_hash);
     let co = CommitObject::parse_cat_file(&latest_cat_file);
-    let new_committer_name = art(settings.clone(), &co, settings.jobs);
+    let new_committer_name = bruteforce(settings.clone(), &co, settings.jobs);
     git_command::filter_branch(&settings.path, &latest_commit_hash, &new_committer_name);
     let latest_commit_hash = git_command::latest_commit_hash(&settings.path);
     println!(
@@ -41,7 +86,7 @@ fn main() {
     );
 }
 
-fn art(settings: Settings, commit_object: &CommitObject, job_count: usize) -> String {
+fn bruteforce(settings: Settings, commit_object: &CommitObject, job_count: usize) -> String {
     let mut found_hash: String = "".to_owned();
     let mut iteration_count = 0;
     let (tx, rx) = channel();

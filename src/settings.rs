@@ -2,16 +2,16 @@ use crate::git::git_command;
 use num_cpus;
 use regex::Regex;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Settings {
     pub path: String,
     pub pattern: String,
-    pub block_size: u64,
+    pub block_size: usize,
     pub jobs: usize,
 }
 
 impl Settings {
-    pub fn new<T: Into<String>>(path: T, pattern: T, block_size: u64, jobs: usize) -> Self {
+    pub fn new<T: Into<String>>(path: T, pattern: T, block_size: usize, jobs: usize) -> Self {
         let pattern: String = pattern.into();
         let regx = Regex::new(r"^[0-9a-f]$").unwrap();
         assert!(!regx.is_match(&pattern));
