@@ -1,3 +1,6 @@
+![license](https://img.shields.io/github/license/ksk001100/seahorse.svg)
+![CI](https://github.com/rnitta/commit_artist/workflows/CI/badge.svg)
+
 # Commit Artist
 
 This is a CLI tool to beautify latest commit of your git repository.
@@ -9,10 +12,19 @@ This is a CLI tool to beautify latest commit of your git repository.
 ### Install Commit Artist
 
 ```shell
-$ cargo install git@github.com:rnitta/commit_artist.git
-$ cd your_working_dir
-$ commit_artist -p ccccccc
-Yay! Now your new hash of the latest commit is cccccc89f1b198c120e43f5d939d9b5412236573.
+$ cargo install commit_artist
+
+$ cd <your_working_dir>
+
+$ git log -1 --format=%H
+86637c3f206d228df1dc1dafa49d31b159b8a358
+
+$ commit_artist -p 1234567
+173015040 hashes calculated...
+Yay! Now your new hash of the latest commit is 12345672abd92a159f3886e08951f29ee7ce0041.
+
+$ git log -1 --format=%H
+12345672abd92a159f3886e08951f29ee7ce0041
 ```
 
 ### Command Line Options

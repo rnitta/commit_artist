@@ -1,13 +1,13 @@
 [package]
 name = "commit_artist"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["rnitta <attinyes@gmail.com>"]
-description = "git commit hash beautifier"
+description = "Git Commit Hash Beautifier"
 edition = "2018"
 keywords = ["git", "cli"]
 repository = "https://github.com/rnitta/commit_artist"
 readme = "README.md"
-license-file = "LICENSE"
+license = "MIT"
 categories = ["command-line-interface"]
 include = [
 	"src/**/*",
