@@ -48,15 +48,15 @@ fn art(c: &Context) {
     }
 
     if let Some(pattern) = c.string_flag("pattern") {
-        settings.pattern = pattern;
+        settings.pattern(pattern);
     }
 
     if let Some(block) = c.int_flag("block") {
-        settings.block_size = block as usize;
+        settings.block_size(block as usize);
     }
 
     if let Some(jobs) = c.int_flag("jobs") {
-        settings.jobs = jobs as usize;
+        settings.jobs(jobs as usize);
     }
 
     if command::check().is_err() {

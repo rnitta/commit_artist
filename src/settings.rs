@@ -32,6 +32,23 @@ impl Settings {
             jobs,
         }
     }
+
+    pub fn pattern<T: Into<String>>(&mut self, pattern: T) {
+        let pattern: String = pattern.into();
+        let regx = Regex::new(r"^[0-9a-f]{1,40}$").unwrap();
+        assert!(regx.is_match(&pattern));
+        self.pattern = pattern;
+    }
+
+    pub fn jobs(&mut self, jobs: usize) {
+        assert!(jobs > 0);
+        self.jobs = jobs;
+    }
+
+    pub fn block_size(&mut self, block_size: usize) {
+        assert!(block_size < 64);
+        self.block_size = block_size;
+    }
 }
 
 impl Default for Settings {
