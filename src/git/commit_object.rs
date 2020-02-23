@@ -33,6 +33,7 @@ impl std::fmt::Display for CommitObject {
 }
 
 impl CommitObject {
+    /// Construct from cat_file output string.
     pub fn parse_cat_file(s: &str) -> Self {
         let regx = Regex::new(
             r"^tree ([0-9a-f]{40})\r?\n(?:parent ([0-9a-f]{40})\r?\n)?author (.+?)\r?\ncommitter (.+?)\r?\n\r?\n([\s\S]+)",
@@ -73,7 +74,7 @@ impl CommitObject {
         }
     }
 
-    // the size of commit object; not structure object's size
+    /// The size of commit object; not structure object's size
     pub fn bytes(&self) -> usize {
         let mut byte_count: usize = 5 // "tree "
             + self.tree.len()
@@ -94,6 +95,7 @@ impl CommitObject {
         byte_count
     }
 
+    /// Calculate commit hash
     pub fn to_sha1(&self, hasher: &mut Sha1) -> String {
         hasher.input_str(&format!("commit {}\0{}", self.bytes(), self));
         let r = hasher.result_str();
@@ -101,3 +103,5 @@ impl CommitObject {
         r
     }
 }
+
+// TODO: tests

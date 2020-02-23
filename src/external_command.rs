@@ -1,12 +1,12 @@
 use std::env;
 use std::process::Command;
 
-// check if `git` command is executable or not
+/// Check if `git` command exists in your environment
 pub fn check() -> Result<std::process::Output, std::io::Error> {
     Command::new("git").output()
 }
 
-// check if there are unstaged changes
+/// Check if there are unstaged changes
 pub fn check_unstaged() -> bool {
     String::from_utf8(
         Command::new("git")
@@ -19,12 +19,12 @@ pub fn check_unstaged() -> bool {
     .is_empty()
 }
 
-// get working directory path string
+/// Get current working directory path string
 pub fn current_dir_path() -> String {
     env::current_dir().unwrap().to_str().unwrap().to_owned()
 }
 
-// get latest commit hash using external command `git log`
+/// Get latest commit hash string by using `git log`
 pub fn latest_commit_hash(path: &str) -> String {
     String::from_utf8(
         Command::new("git")
@@ -43,7 +43,7 @@ pub fn latest_commit_hash(path: &str) -> String {
     .to_owned()
 }
 
-// get commit object file content using `git cat-file -p <hash>`
+/// Get commit object file content using `git cat-file -p <hash>`
 pub fn cat_file(path: &str, hash: &str) -> String {
     String::from_utf8(
         Command::new("git")
@@ -60,6 +60,7 @@ pub fn cat_file(path: &str, hash: &str) -> String {
     .expect("Error in getting output")
 }
 
+/// Change committer name of the commit whose hash is specified.
 pub fn filter_branch(path: &str, latest_commit_hash: &str, committer_name: &str) {
     Command::new("git")
         .args(&[

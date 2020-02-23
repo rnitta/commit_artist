@@ -1,8 +1,9 @@
+mod external_command;
 mod git;
 mod settings;
 
+use crate::external_command as command;
 use crate::git::commit_object::CommitObject;
-use crate::git::git_command;
 use crate::settings::Settings;
 use crypto::sha1::Sha1;
 use seahorse::{App, Context, Flag, FlagType};
@@ -38,6 +39,7 @@ fn main() {
     app.run(args);
 }
 
+/// as you see
 fn art(c: &Context) {
     let mut settings = Settings::default();
 
@@ -57,35 +59,36 @@ fn art(c: &Context) {
         settings.jobs = jobs as usize;
     }
 
-    if git_command::check().is_err() {
+    if command::check().is_err() {
         println!("git command not found");
         return;
     }
 
-    if !git_command::check_unstaged() {
+    if !command::check_unstaged() {
         println!(
             "There are unstages changes. You should stash or discard them before running this."
         );
         return;
     }
 
-    let latest_commit_hash = git_command::latest_commit_hash(&settings.path);
+    let latest_commit_hash = command::latest_commit_hash(&settings.path);
     if latest_commit_hash.is_empty() {
         println!("No Commits are Detected.");
         return;
     }
 
-    let latest_cat_file: String = git_command::cat_file(&settings.path, &latest_commit_hash);
+    let latest_cat_file: String = command::cat_file(&settings.path, &latest_commit_hash);
     let co = CommitObject::parse_cat_file(&latest_cat_file);
     let new_committer_name = bruteforce(settings.clone(), &co, settings.jobs);
-    git_command::filter_branch(&settings.path, &latest_commit_hash, &new_committer_name);
-    let latest_commit_hash = git_command::latest_commit_hash(&settings.path);
+    command::filter_branch(&settings.path, &latest_commit_hash, &new_committer_name);
+    let latest_commit_hash = command::latest_commit_hash(&settings.path);
     println!(
         "Yay! Now your new hash of the latest commit is \x1b[31m{}\x1b[m.",
         latest_commit_hash
     );
 }
 
+/// Spawn bruteforce thread and catch the result and check it and loop back unless there are no expected result.
 fn bruteforce(settings: Settings, commit_object: &CommitObject, job_count: usize) -> String {
     let mut found_hash: String = "".to_owned();
     let mut iteration_count = 0;
