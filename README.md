@@ -1,3 +1,4 @@
+![crates.io](https://img.shields.io/crates/v/commit_artist.svg)
 ![license](https://img.shields.io/github/license/ksk001100/seahorse.svg)
 ![CI](https://github.com/rnitta/commit_artist/workflows/CI/badge.svg)
 
