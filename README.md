@@ -4,7 +4,7 @@
 
 # Commit Artist
 
-This is a CLI tool to beautify latest commit of your git repository.
+A CLI tool to beautify latest commit of your git repository.
 
 ![DEMO](./doc/demo.png)
 
@@ -30,10 +30,10 @@ $ git log -1 --format=%H
 
 ### Command Line Options
 
-- [--path] path to working directory. default: current directory
-- [--pattern, -p] pattern to match. default: 0000000
-- [--block, -b] log\[2\](how many hashes should calculated in each thread). default: 20
-- [--jobs, -j] how many thread should spawn to bruteforce. default: your max - 1
+- [--path] Path to working directory. default: current directory
+- [--pattern, -p] Pattern to match. default: 0000000
+- [--block, -b] log\[2\](how many hashes should be calculated in each thread). default: 20
+- [--jobs, -j] the number of threads that will be spawned to bruteforce. default: your max - 1
 
 ## How it works
 ![architecture](./doc/architecture.png)
