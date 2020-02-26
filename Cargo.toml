@@ -1,6 +1,6 @@
 [package]
 name = "commit_artist"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["rnitta <attinyes@gmail.com>"]
 description = "Git Commit Hash Beautifier"
 edition = "2018"
