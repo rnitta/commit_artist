@@ -19,22 +19,22 @@ fn main() {
         .description(env!("CARGO_PKG_DESCRIPTION"))
         .version(env!("CARGO_PKG_VERSION"))
         .usage("commit_artist <flags>")
-        .action(art)
-        .flags(vec![
-            Flag::new(
-                "path",
-                "[optional] --path <path_to_your_repository>",
-                FlagType::String,
-            ),
+        .flag(Flag::new(
+            "path",
+            "[optional] --path <path_to_your_repository>",
+            FlagType::String,
+        ))
+        .flag(
             Flag::new(
                 "pattern",
                 "[optional] --pattern <[0-9a-f]{1,40}>",
                 FlagType::String,
             )
             .alias("p"),
-            Flag::new("block", "[optional] --block 28", FlagType::Int).alias("b"),
-            Flag::new("jobs", "[optional] --jobs 4", FlagType::Int).alias("j"),
-        ]);
+        )
+        .flag(Flag::new("block", "[optional] --block 28", FlagType::Int).alias("b"))
+        .flag(Flag::new("jobs", "[optional] --jobs 4", FlagType::Int).alias("j"))
+        .action(art);
 
     app.run(args);
 }
