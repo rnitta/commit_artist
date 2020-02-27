@@ -39,8 +39,19 @@ $ git log -1 --format=%H
 ![architecture](./doc/architecture.png)
 
 A commit hash of git is generated from commit object.  
-Commit object consists of "tree hash", "parent hash", "author info", "committer info" and "commit message".  
-Author info and committer info each have "name", "email address", "timestamp".  
+Commit object consists of
+
+- Tree hash
+- Parent hash
+- Author
+    - Name
+    - Email address
+    - Timestamp  
+- Committer
+    - Name
+    - Email address
+    - Timestamp  
+- Commit message  
 
 One of the easiest thing to configure (even after the commit is done) among these attributes above is committer's name.  
 Changing it may affect almost nothing but commit hash.  
