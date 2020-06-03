@@ -27,8 +27,16 @@ fn main() {
                 .usage("[optional] --pattern <[0-9a-f]{1,40}>")
                 .alias("p"),
         )
-        .flag(Flag::new("block", FlagType::Int).usage("[optional] --block 28").alias("b"))
-        .flag(Flag::new("jobs", FlagType::Int).usage("[optional] --jobs 4").alias("j"))
+        .flag(
+            Flag::new("block", FlagType::Int)
+                .usage("[optional] --block 28")
+                .alias("b"),
+        )
+        .flag(
+            Flag::new("jobs", FlagType::Int)
+                .usage("[optional] --jobs 4")
+                .alias("j"),
+        )
         .action(art);
 
     app.run(args);
