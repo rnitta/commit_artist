@@ -13,27 +13,22 @@ use std::thread;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let app = App::new()
-        .name("Commit Artist")
+    let app = App::new("Commit Artist")
         .author(env!("CARGO_PKG_AUTHORS"))
         .description(env!("CARGO_PKG_DESCRIPTION"))
         .version(env!("CARGO_PKG_VERSION"))
         .usage("commit_artist <flags>")
-        .flag(Flag::new(
-            "path",
-            "[optional] --path <path_to_your_repository>",
-            FlagType::String,
-        ))
         .flag(
-            Flag::new(
-                "pattern",
-                "[optional] --pattern <[0-9a-f]{1,40}>",
-                FlagType::String,
-            )
-            .alias("p"),
+            Flag::new("path", FlagType::String)
+                .usage("[optional] --path <path_to_your_repository>"),
         )
-        .flag(Flag::new("block", "[optional] --block 28", FlagType::Int).alias("b"))
-        .flag(Flag::new("jobs", "[optional] --jobs 4", FlagType::Int).alias("j"))
+        .flag(
+            Flag::new("pattern", FlagType::String)
+                .usage("[optional] --pattern <[0-9a-f]{1,40}>")
+                .alias("p"),
+        )
+        .flag(Flag::new("block", FlagType::Int).usage("[optional] --block 28").alias("b"))
+        .flag(Flag::new("jobs", FlagType::Int).usage("[optional] --jobs 4").alias("j"))
         .action(art);
 
     app.run(args);
@@ -43,19 +38,19 @@ fn main() {
 fn art(c: &Context) {
     let mut settings = Settings::default();
 
-    if let Some(path) = c.string_flag("path") {
+    if let Ok(path) = c.string_flag("path") {
         settings.path = path;
     }
 
-    if let Some(pattern) = c.string_flag("pattern") {
+    if let Ok(pattern) = c.string_flag("pattern") {
         settings.pattern(pattern);
     }
 
-    if let Some(block) = c.int_flag("block") {
+    if let Ok(block) = c.int_flag("block") {
         settings.block_size(block as usize);
     }
 
-    if let Some(jobs) = c.int_flag("jobs") {
+    if let Ok(jobs) = c.int_flag("jobs") {
         settings.jobs(jobs as usize);
     }
 
